@@ -51,7 +51,10 @@ class RabbitMQJob extends Job implements JobContract
      */
     public function fire()
     {
-        $this->resolveAndFire($this->getParsedBody());
+        $listenList = config("eventTask");
+        $body = $this->getParsedBody();
+        $body['job'] = array_get($listenList,$body['job'],null);
+        $this->resolveAndFire($body);
     }
 
     /**
